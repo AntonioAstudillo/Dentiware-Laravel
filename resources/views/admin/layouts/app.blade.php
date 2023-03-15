@@ -84,13 +84,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{route('admin.index')}}" class="nav-link">
                       <i class="fas fa-user"></i>
                       <p>Pacientes</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{route('admin.registraDentista')}}" class="nav-link">
                       <i class="fas fa-user-md"></i>
                       <p>Dentistas</p>
                     </a>

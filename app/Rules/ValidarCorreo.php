@@ -7,7 +7,13 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidarCorreo implements Rule
 {
+    private $tipo;
     private $message;
+
+    public function __construct($tipo)
+    {
+        $this->tipo = $tipo;
+    }
     /**
      * Determine if the validation rule passes.
      *
@@ -44,7 +50,7 @@ class ValidarCorreo implements Rule
      */
     private function checkEmail(String $correo)
     {
-        $results = DB::select('select * from persona where correo = ? and tipo = ?', [$correo , 2]);
+        $results = DB::select('select * from persona where correo = ? and tipo = ?', [$correo , $this->tipo]);
 
         $count = count($results);
 
@@ -54,7 +60,7 @@ class ValidarCorreo implements Rule
 
     private function isValid(String $correo)
     {
-        $expresion = "/^(([^<>()[\]\.,&%$#!=?¡¿;:\s@\"]+(\.[^<>()[\]\.,&%$#!=?¡¿;:\s@\"]+)*)|(\".+\")){2,63}@(hotmail.com|gmail.com|uteg.edu.mx|outlook.com)$/";
+        $expresion = "/^(([^<>()[\]\.,&%$#!=?¡¿;:\s@\"]+(\.[^<>()[\]\.,&%$#!=?¡¿;:\s@\"]+)*)|(\".+\")){2,63}@(hotmail.com|gmail.com|uteg.edu.mx|outlook.com|dentiware.com)$/";
 
         if(preg_match($expresion , $correo)){
             return true;

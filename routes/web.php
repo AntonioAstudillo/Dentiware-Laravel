@@ -75,3 +75,14 @@ Route::get('/llenarSelectDentista/{id}' , [DentistaController::class , 'show']);
 
 //Con esta ruta almacenamos un nuevo paciente a la base de datos. Esta ruta se llamada desde una petición asincrona desde el archivo registroPaciente.js
 Route::post('/registraPaciente' , [PacienteController::class , 'store']);
+
+//Mostramos el formulario de registra Dentista.
+Route::get('/registraDentista' , [DentistaController::class , 'index'])->name('admin.registraDentista');
+
+//Esta ruta nos sirve para poder registrar al paciente en la database.
+Route::post('/registraDentista' , [DentistaController::class, 'store']);
+
+
+//Este metodo se manda a llamar desde una petición asincrona, se utiliza para validar el correo del dentista
+Route::post('administrador/validarCorreoDentista' , [DentistaController::class , 'validaCorreo']);
+

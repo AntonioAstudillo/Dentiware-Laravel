@@ -95,7 +95,6 @@
                            <li>Jueves<span class="schedule-time">09:00 – 21:00</span></li>
                            <li>Viernes<span class="schedule-time">09:00 – 21:00</span></li>
                            <li>Sabados<span class="schedule-time">09:00 - 14:00</span></li>
-                           <li>Domingos<span class="schedule-time">09:00 - 14:00</span></li>
                         </ul>
                      </div>
                   </div>

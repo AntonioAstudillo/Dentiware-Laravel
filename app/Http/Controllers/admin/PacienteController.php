@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\admin;
 
 use FFI\Exception;
+use App\Rules\ValidaNombre;
+use App\Helpers\Auxiliares;
 use Illuminate\Support\Str;
+use App\Rules\ValidarCorreo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Rules\ValidaDomicilio;
+use App\Rules\ValidaGenero;
 use Illuminate\Support\Facades\Validator;
-use App\Rules\ValidarCorreo;
+
 
 class PacienteController extends Controller
 {
@@ -40,15 +45,19 @@ class PacienteController extends Controller
     {
         $data = $request->all();
 
+        //Sanitizamos datos
+        $data = array_map('trim' , $data);
+        $data = array_map('strip_tags' , $data);
+        $data = array_map('htmlspecialchars', $data);
 
         $validator = Validator::make($data, [
-            'nombrePaciente' => 'required|max:50|string',
-            'apellidoPaciente' => 'required|max:60|string',
+            'nombrePaciente' => ['required' , 'max:50' , 'string' , new ValidaNombre ] ,
+            'apellidoPaciente' => ['required' , 'max:50' , 'string' , new ValidaNombre ] ,
             'edadPaciente' => 'required|max:255|integer',
             'telefonoPaciente' => 'required|numeric',
-            'generoPaciente' => 'required|string|',
-            'domicilioPaciente' => 'required|string',
-            'correoPaciente' => ['required' , 'string' , new ValidarCorreo],
+            'generoPaciente' => ['required' , 'string' , new ValidaGenero] ,
+            'domicilioPaciente' => ['required' , 'max:150' , 'string' , new ValidaDomicilio ] ,
+            'correoPaciente' => ['required' , 'string' , new ValidarCorreo(2)],
             'tratamientoPaciente' => 'required|string',
             'dentistaPaciente' => 'required|numeric',
             'fechaCita' => 'required|date',
@@ -65,10 +74,13 @@ class PacienteController extends Controller
             return response()->json(['errors' => $errores] , 422);
 
         }else{
-           //Sanitizamos datos
-           $data = array_map('trim' , $data);
-           $data = array_map('strip_tags' , $data);
-           $data = array_map('htmlspecialchars', $data);
+
+            //Validamos la cita primero.
+            if(!Auxiliares::validarCita($data['horaCita'] , $data['fechaCita'] , $data['dentistaPaciente'] ))
+            {
+                return response()->json(['errors' => 'Cita ocupada'] , 422);
+            }
+
 
            //obtenemos el saldo
            $saldo = DB::select("SELECT precio FROM tratamiento where idtratamiento = ?" , [$data['tratamientoPaciente'] + 1 ]);
@@ -88,14 +100,14 @@ class PacienteController extends Controller
                     DB::insert("INSERT INTO paciente(idpaciente , idPersona , comentarios) values(?, ? ,?)" , [null , $idLast , $data['comentariosPaciente']]);
 
 
-                    DB::insert("INSERT INTO cita(idcita , fecha , hora , idPaciente , idDentista , idTratamiento , abono , idComentarios) values(?,?,?,?,?,?,?,?)",
-                            [null , $data['fechaCita'], $data['horaCita'] , $idLast , $data['dentistaPaciente'] , $data['tratamientoPaciente'] +1 , $data['saldo'] , null
-                        ]);
+                    DB::insert("INSERT INTO cita(idcita , fecha , hora , idPaciente , idDentista , idTratamiento , abono , idComentarios , date_Register) values(?,?,?,?,?,?,?,?,?)",
+                    [null , $data['fechaCita'], $data['horaCita'] , $idLast , $data['dentistaPaciente'] , $data['tratamientoPaciente'] +1 , $data['saldo'] , null, Auxiliares::getDatetime()]);
 
                     DB::insert("INSERT INTO historialtratamiento values(?,?,?,?)" , [null , $idLast , '1' , $data['saldo']]);
 
                 });
 
+                //retornarmos un 200 si la transaccion se hizo de forma correcta.
                 return response('' , 200);
 
            }catch(Exception $e){
