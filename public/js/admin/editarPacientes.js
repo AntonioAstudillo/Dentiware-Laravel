@@ -1,49 +1,27 @@
+import { templateDataTable } from "./datatableTemplate.js";
+
 $(document).ready(function () {
-    const tabla = $("#tablaPacientes").DataTable({
-        processing: true,
-        ajax: {
-            url: "/administrador/getAllPacientes",
+    let columnas = [
+        { data: "idPersona" },
+        { data: "nombre" },
+        { data: "apellidos" },
+        { data: "edad" },
+        { data: "correo" },
+        { data: "telefono" },
+        { data: "direccion" },
+        { data: "genero" },
+        {
+            defaultContent:
+                "<button class='editar btn btn-warning btn-sm'><i class='fas fa-pencil-alt fa-sm'></i></button>",
         },
-        responsive: true,
-        columns: [
-            { data: "idPersona" },
-            { data: "nombre" },
-            { data: "apellidos" },
-            { data: "edad" },
-            { data: "correo" },
-            { data: "telefono" },
-            { data: "direccion" },
-            { data: "genero" },
-            {
-                defaultContent:
-                    "<button class='editar btn btn-warning btn-sm'><i class='fas fa-pencil-alt fa-sm'></i></button>",
-            },
-        ],
-        language: {
-            emptyTable: "",
-            info: "",
-            infoEmpty: "",
-            search: "Buscar:",
-            zeroRecords: "",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: '<button class="btn btn-outline-dark ms-2">Siguiente </button>',
-                previous:
-                    '<button class="btn btn-outline-dark">Anterior </button>',
-            },
-            lengthMenu: "_MENU_",
-            processing:
-                "<div class='container '>  <div class='spinner-border text-primary editar mt-4' role='status'><span class='sr-only'>Cargando...</span></div> </div>",
-            loadingRecords: "Cargando...",
-            infoFiltered: " _TOTAL_ de _MAX_ pacientes",
-        },
-        pagingType: "simple",
-        lengthMenu: [
-            [5, 10, 15, 20, -1],
-            [5, 10, 15, 20, "Todos"],
-        ],
-    });
+    ];
+
+    //Mandamos a llamar al metodo donde se almacena la plantilla del datatable y lo que nos retorna se lo asignamos a tabla.
+    let tabla = templateDataTable(
+        columnas,
+        "/administrador/getAllPacientes",
+        "tablaPacientes"
+    );
 
     const obtener_data_editar = function (tbody, tabla) {
         let data;

@@ -114,7 +114,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{route('admin.editarDentista')}}" class="nav-link">
                       <i class="fas fa-user-md"></i>
                       <p>Dentistas</p>
                     </a>
@@ -255,5 +255,6 @@
     </footer>
 
     @include('admin.layouts.scripts')
+    @yield('scriptPagina')
 </div>
 </body>

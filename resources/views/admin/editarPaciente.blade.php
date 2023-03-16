@@ -97,4 +97,9 @@
 @endsection
 
 
+@section('scriptPagina')
+    <script src="{{asset('js/admin/editarPacientes.js')}}" charset="utf-8" type="module"></script>
+@endsection
+
+
 

@@ -30,24 +30,11 @@ Route::get('/servicios/{id}', [VistasController::class , 'show'])->name('service
  */
 
 
-
-/**
- * ESTAS DOS RUTAS SE LLAMAN DESDE UNA PETICION ASINCRONA DE JAVASCRIPT
- *
- */
-
-
 //Esta ruta se manda a llamar desde una peticón asincrona utilizando el objeto XMLHttpRequest.
 Route::post('/consulta' , [ConsultaController::class , 'store']);
 
-
 //Esta ruta manda a llamar al controlador encargado de almacenar los correos de noticias.
 Route::post('/noticias' , [NoticiasController::class , 'store']);
-
-/**
- * FIN DE RUTAS LLAMADAS POR PETICIÓN ASINCRONA
- */
-
 
 //Ruta para mostrar la vista del login
 Route::get('/login' , [LoginController::class , 'index'])->name('login');
@@ -61,17 +48,13 @@ Route::post('/signIn' , [LoginController::class , 'store'])->name('signIn');
 //Generamos la vista del dashboard, en caso de que el usuario este autenticado
 Route::get('/dashboard' , [AdminController::class , 'index'])->name('admin.index');
 
-
 /*Con esta ruta voy a obtener todos los tratamientos que tiene la clinica para poder llenar el select de tratamientos dentro de la vista registro pacientes
   en el dashboard del sistema. Esta ruta se llama desde una peticion asincrona. */
 Route::get('/administrador/getTratamientos' , [TratamientosController::class , 'show']);
 
-
 //Llenamos el select del dentista de acuerdo a la especialidad que elige el usuario.
 //Esta ruta se manda a llamar desde una peticion asincrona
 Route::get('/llenarSelectDentista/{id}' , [DentistaController::class , 'show']);
-
-
 
 //Con esta ruta almacenamos un nuevo paciente a la base de datos. Esta ruta se llamada desde una petición asincrona desde el archivo registroPaciente.js
 Route::post('/registraPaciente' , [PacienteController::class , 'store']);
@@ -82,19 +65,26 @@ Route::get('/registraDentista' , [DentistaController::class , 'index'])->name('a
 //Esta ruta nos sirve para poder registrar al paciente en la database.
 Route::post('/registraDentista' , [DentistaController::class, 'store']);
 
-
 //Esta ruta se manda a llamar desde una petición asincrona, se utiliza para validar el correo del dentista dentro del formulario de registroDentista
 Route::post('/administrador/validarCorreoDentista' , [DentistaController::class , 'validaCorreo']);
 
-
 //Ruta para mostrar el formulario de editar paciente
 Route::get('/administrador/editarPaciente' , [PacienteController::class , 'edit'])->name('admin.editarPaciente');
-
-
 
 //Ruta utilizada para llenar el datatable de la vista editar paciente. Se llama desde una petición asincrona.
 Route::get('/administrador/getAllPacientes' , [PacienteController::class , 'getAllPacientes']);
 
 //Esta ruta la utilizamos para actualizar los datos de un paciente.
-Route::post('administrador/actualizarDatosPaciente' , [PacienteController::class , 'actualizarDatosPaciente']);
+Route::post('/administrador/actualizarDatosPaciente' , [PacienteController::class , 'actualizarDatosPaciente']);
 
+
+//Ruta para mostrar el formulario de editar dentista.
+Route::get('/administrador/editarDentista' , [DentistaController::class , 'edit'])->name('admin.editarDentista');
+
+
+//Ruta utilizada para llenar el datatable de la vista editar dentista. Se llama desde una petición asincrona.
+Route::get('/administrador/getAllDentistas' , [DentistaController::class , 'getAllDentistas']);
+
+
+//Con esta ruta actualizamos los datos de un dentista. Dicha ruta se llama desde una peticion del archivo editarDentista.js
+Route::post('administrador/actualizarDatosDentista' , [DentistaController::class , 'update']);
