@@ -70,7 +70,6 @@ class DentistaController extends Controller
 
         if($validator->fails())
         {
-            $errores = $validator->getMessageBag()->all();
             return response('', 422);
         }
 
@@ -82,7 +81,7 @@ class DentistaController extends Controller
 
 
         /*
-           Insertamos la data en sus respectivas tabla. En este punto la información ya viene filtrada y sanitizada
+           Insertamos la data en sus respectivas tablas. En este punto la información ya viene filtrada y sanitizada
         */
 
         try

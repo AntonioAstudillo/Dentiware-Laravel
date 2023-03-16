@@ -257,7 +257,7 @@ function validarCorreo(e) {
 
     formData.append("correo", valor);
 
-    req.open("POST", "administrador/validarCorreoDentista");
+    req.open("POST", "/administrador/validarCorreoDentista");
     req.setRequestHeader("X-CSRF-TOKEN", token);
 
     req.onreadystatechange = function () {

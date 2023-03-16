@@ -24,16 +24,6 @@ class PacienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Insertamos en la base de datos un paciente junto con toda la información correspondiente a su primera cita. Retornamos un codigo de estado indicando el resultado
      * de la solicitud recibida.
      * Este metodo se manda a llamar desde una petición asincrona en javascript, la peticion se encuentra en la siguiente ruta admin/registroPaciente.js
@@ -130,14 +120,14 @@ class PacienteController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Mostramos la vista para poder editar un determinado paciente
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        return view('admin.editarPaciente');
     }
 
     /**
@@ -161,5 +151,53 @@ class PacienteController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * Este metodo nos sirve para llenar el datatable de la vista editarPaciente
+     * Este metodo se manda a llamar desde una petición asincrona en el archivo editarPaciente.js de mi carpeta public/admin
+     */
+    public function getAllPacientes()
+    {
+
+        $pacientes = DB::select("SELECT persona.idPersona , persona.nombre , persona.apellidos ,persona.edad , persona.correo , persona.telefono , persona.direccion , persona.genero  FROM persona WHERE persona.tipo = ?" , [2]);
+
+
+        return response()->json(['data' => $pacientes]);
+    }
+
+
+    public function actualizarDatosPaciente(Request $request)
+    {
+
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'nombre' => ['required' , 'max:50' , 'string' , new ValidaNombre ] ,
+            'apellidos' => ['required' , 'max:50' , 'string' , new ValidaNombre ] ,
+            'edad' => 'required|max:255|integer',
+            'telefono' => 'required|numeric',
+            'correo' => ['required' , 'string' , 'email'],
+            'direccion' => ['required' , 'max:150' , 'string' , new ValidaDomicilio ] ,
+            'genero' => ['required' , 'string' , new ValidaGenero],
+
+        ]);
+
+
+        if($validator->fails())
+        {
+            return response('', 422);
+        }
+
+        $filasAfectadas = DB::update("UPDATE persona SET nombre = ? , apellidos = ? , edad = ? , telefono = ? , correo = ? , direccion = ? , genero = ?
+        WHERE idPersona = ? " , [$data['nombre'] , $data['apellidos'] , $data['edad'] , $data['telefono'] , $data['correo'], $data['direccion'] , $data['genero'] , $data['id']]);
+
+        if($filasAfectadas > 0)
+        {
+            return response('' , 200);
+        }else{
+            return response('' , 500);
+        }
     }
 }

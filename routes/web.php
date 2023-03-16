@@ -83,6 +83,18 @@ Route::get('/registraDentista' , [DentistaController::class , 'index'])->name('a
 Route::post('/registraDentista' , [DentistaController::class, 'store']);
 
 
-//Este metodo se manda a llamar desde una petición asincrona, se utiliza para validar el correo del dentista
-Route::post('administrador/validarCorreoDentista' , [DentistaController::class , 'validaCorreo']);
+//Esta ruta se manda a llamar desde una petición asincrona, se utiliza para validar el correo del dentista dentro del formulario de registroDentista
+Route::post('/administrador/validarCorreoDentista' , [DentistaController::class , 'validaCorreo']);
+
+
+//Ruta para mostrar el formulario de editar paciente
+Route::get('/administrador/editarPaciente' , [PacienteController::class , 'edit'])->name('admin.editarPaciente');
+
+
+
+//Ruta utilizada para llenar el datatable de la vista editar paciente. Se llama desde una petición asincrona.
+Route::get('/administrador/getAllPacientes' , [PacienteController::class , 'getAllPacientes']);
+
+//Esta ruta la utilizamos para actualizar los datos de un paciente.
+Route::post('administrador/actualizarDatosPaciente' , [PacienteController::class , 'actualizarDatosPaciente']);
 
