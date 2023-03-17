@@ -1,28 +1,21 @@
-   import {ruta} from '../config.js';
+import { templateDataTable } from "./datatableTemplate.js";
 
-   $(document).ready(function() {
+$(document).ready(function () {
+    let columnas = [
+        { data: "idPersona" },
+        { data: "nombre" },
+        { data: "apellidos" },
+        { data: "edad" },
+        { data: "correo" },
+        { data: "telefono" },
+        { data: "direccion" },
+        { data: "genero" },
+    ];
 
-      const tabla = $('#tablaPacientes').DataTable( {
-               "ajax":{
-                  "url":ruta + 'administrador/getAllPacientes',
-                  "dataSrc":""
-               },
-               "responsive":true,
-               'language':{
-                  'emptyTable':'No hay pacientes registrados',
-                  'info': '',
-                  'infoEmpty':'Mostrando 0 de 0 pacientes registrados',
-                  'search':'Buscar:',
-                  'zeroRecords':'Sin resultados',
-                  'paginate':{
-                     'first':'Primero',
-                     'last':'Último',
-                     'next':'<button class="btn btn-outline-dark ms-2">Siguiente </button>',
-                     'previous':'<button class="btn btn-outline-dark">Anterior </button>'
-                  },
-                  'lengthMenu':'_MENU_'
-               },
-               'pagingType': 'simple',
-               'lengthMenu': [[5,10,15,20,-1] , [5,10,15,20,'Todos']]
-      });
-   });
+    //Mandamos a llamar al metodo donde se almacena la plantilla del datatable y lo que nos retorna se lo asignamos a tabla.
+    templateDataTable(
+        columnas,
+        "/administrador/getAllPacientes",
+        "tablaPacientes"
+    );
+});

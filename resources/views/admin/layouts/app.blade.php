@@ -132,13 +132,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{route('admin.eliminarPaciente')}}" class="nav-link">
                       <i class="fas fa-user"></i>
                       <p>Pacientes</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{route('admin.eliminarDentista')}}" class="nav-link">
                       <i class="fas fa-user-md"></i>
                       <p>Dentistas</p>
                     </a>
@@ -157,13 +157,13 @@
                  </a>
                  <ul class="nav nav-treeview">
                    <li class="nav-item">
-                     <a href="" class="nav-link">
+                     <a href="{{route('admin.buscarPaciente')}}" class="nav-link">
                        <i class="fas fa-user"></i>
                        <p>Pacientes</p>
                      </a>
                    </li>
                    <li class="nav-item">
-                     <a href="" class="nav-link">
+                     <a href="{{route('admin.buscarDentista')}}" class="nav-link">
                        <i class="fas fa-user-md"></i>
                        <p>Dentistas</p>
                      </a>

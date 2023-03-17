@@ -264,7 +264,19 @@ class DentistaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try
+        {
+            DB::transaction(function () use($id)
+            {
+                DB::delete("DELETE FROM persona WHERE idPersona = ?" , [$id]);
+                DB::delete("DELETE FROM dentista WHERE idPersona = ?" , [$id]);
+            });
+
+            return response('' , 200);
+
+        }catch(Exception $e){
+            return response('' , 500);
+        }
     }
 
     //Con este metodo validamos que el correo ingresado en el formulario de registro dentista, no se encuentre ya registrado
@@ -342,7 +354,20 @@ class DentistaController extends Controller
 
 
         return $cargo;
-   }
+    }
+
+    //Generamos la vista de buscarDentisa
+    public function searchDentistView()
+    {
+        return view('admin.buscarDentista');
+    }
+
+
+     //generamos la vista de eliminarDentista
+    public function eliminarDentista()
+    {
+       return view('admin.eliminarDentista');
+    }
 
 
 

@@ -114,9 +114,9 @@ class PacienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return view('admin.buscarPaciente');
     }
 
     /**
@@ -130,17 +130,7 @@ class PacienteController extends Controller
         return view('admin.editarPaciente');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -150,7 +140,21 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try
+        {
+            DB::transaction(function () use($id)
+            {
+                DB::delete("DELETE FROM persona WHERE idPersona = ?" , [$id]);
+                DB::delete("DELETE FROM paciente WHERE idPersona = ?" , [$id]);
+                DB::delete("DELETE FROM cita WHERE idPaciente = ?" , [$id]);
+
+            });
+
+            return response('' , 200);
+
+        }catch(Exception $e){
+            return response('' , 500);
+        }
     }
 
 
@@ -200,4 +204,13 @@ class PacienteController extends Controller
             return response('' , 500);
         }
     }
+
+    //generamos la vista de eliminar pacientes
+    public function eliminarPaciente()
+    {
+        return view('admin.eliminarPaciente');
+    }
+
+
+
 }

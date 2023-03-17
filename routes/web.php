@@ -87,4 +87,29 @@ Route::get('/administrador/getAllDentistas' , [DentistaController::class , 'getA
 
 
 //Con esta ruta actualizamos los datos de un dentista. Dicha ruta se llama desde una peticion del archivo editarDentista.js
-Route::post('administrador/actualizarDatosDentista' , [DentistaController::class , 'update']);
+Route::post('/administrador/actualizarDatosDentista' , [DentistaController::class , 'update']);
+
+
+
+//Ruta utilizada para generar la vista de buscar pacientes
+Route::get('/administrador/buscarPacientes' , [PacienteController::class , 'show'])->name('admin.buscarPaciente');
+
+
+
+//Ruta utilizada para generar la vista de buscar dentistas
+Route::get('/administrador/buscarDentisas' , [DentistaController::class , 'searchDentistView'])->name('admin.buscarDentista');
+
+
+//Ruta para mostrar vista de eliminar paciente
+Route::get('/administrador/eliminarPaciente' , [PacienteController::class , 'eliminarPaciente'])->name('admin.eliminarPaciente');
+
+
+//Ruta usada para eliminar un paciente, se manda a llamar desde una petición asincrona en el archivo eliminarPacientes.js de la carpeta admin
+Route::get('/administrador/deletePaciente/{idPaciente}' , [PacienteController::class , 'destroy']);
+
+//Ruta utilizada para generar la vista de eliminacion de dentistas
+Route::get('/administrador/eliminarDentista' , [DentistaController::class , 'eliminarDentista'])->name('admin.eliminarDentista');
+
+
+//Ruta utilizada para eliminar un dentista
+Route::get('/administrador/deleteDentista/{id}' , [DentistaController::class , 'destroy']);
