@@ -29,14 +29,6 @@ class DentistaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -367,6 +359,24 @@ class DentistaController extends Controller
     public function eliminarDentista()
     {
        return view('admin.eliminarDentista');
+    }
+
+
+    //obtenemos información especifica de un dentista, para poder llenar el modal en el modulo pagoCitas
+    public function dentista(Request $request)
+    {
+        $data = $request->all();
+
+        $consulta = DB::table('persona')
+        ->join('dentista' , 'dentista.idPersona' , '=' , 'persona.idPersona')
+        ->join('cita', 'cita.idDentista' , '=' , 'dentista.idPersona')
+        ->where('cita.idPaciente' , '=' , $data['idPersona'] )
+        ->where('cita.status' , '=' , 1)
+        ->where('cita.idcita' , '=' , $data['idCita'])
+        ->select('persona.idPersona' , DB::raw('concat(persona.nombre , " " , persona.apellidos) as nombre')  , 'persona.edad' , 'dentista.cargo' , 'dentista.turno' , 'persona.correo')
+        ->get();
+
+        return response()->json(['data' => $consulta]);
     }
 
 

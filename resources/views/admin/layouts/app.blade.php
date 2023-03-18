@@ -187,7 +187,7 @@
                      </a>
                    </li>
                    <li class="nav-item">
-                     <a href="" class="nav-link">
+                     <a href="{{route('admin.pagoCita')}}" class="nav-link">
                        <i class="fas fa-money-bill"></i>
                        <p>Citas</p>
                      </a>

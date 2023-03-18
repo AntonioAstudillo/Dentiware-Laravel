@@ -6,11 +6,11 @@ use App\Http\Controllers\VistasController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\DentistaController;
+use App\Http\Controllers\admin\CitasController;
 use App\Http\Controllers\admin\NominaController;
+use App\Http\Controllers\admin\DentistaController;
 use App\Http\Controllers\admin\PacienteController;
 use App\Http\Controllers\admin\TratamientosController;
-
 
 /**
  * RUTAS GENERALES
@@ -57,8 +57,6 @@ Route::get('/administrador/getTratamientos' , [TratamientosController::class , '
 //Esta ruta se manda a llamar desde una peticion asincrona
 Route::get('/llenarSelectDentista/{id}' , [DentistaController::class , 'show']);
 
-//Con esta ruta almacenamos un nuevo paciente a la base de datos. Esta ruta se llamada desde una petición asincrona desde el archivo registroPaciente.js
-Route::post('/registraPaciente' , [PacienteController::class , 'store']);
 
 //Mostramos el formulario de registra Dentista.
 Route::get('/registraDentista' , [DentistaController::class , 'index'])->name('admin.registraDentista');
@@ -66,18 +64,16 @@ Route::get('/registraDentista' , [DentistaController::class , 'index'])->name('a
 //Esta ruta nos sirve para poder registrar al paciente en la database.
 Route::post('/registraDentista' , [DentistaController::class, 'store']);
 
+
+//Ruta utilizada para generar la vista de eliminacion de dentistas
+Route::get('/administrador/eliminarDentista' , [DentistaController::class , 'eliminarDentista'])->name('admin.eliminarDentista');
+
+
+//Ruta utilizada para eliminar un dentista
+Route::get('/administrador/deleteDentista/{id}' , [DentistaController::class , 'destroy']);
+
 //Esta ruta se manda a llamar desde una petición asincrona, se utiliza para validar el correo del dentista dentro del formulario de registroDentista
 Route::post('/administrador/validarCorreoDentista' , [DentistaController::class , 'validaCorreo']);
-
-//Ruta para mostrar el formulario de editar paciente
-Route::get('/administrador/editarPaciente' , [PacienteController::class , 'edit'])->name('admin.editarPaciente');
-
-//Ruta utilizada para llenar el datatable de la vista editar paciente. Se llama desde una petición asincrona.
-Route::get('/administrador/getAllPacientes' , [PacienteController::class , 'getAllPacientes']);
-
-//Esta ruta la utilizamos para actualizar los datos de un paciente.
-Route::post('/administrador/actualizarDatosPaciente' , [PacienteController::class , 'actualizarDatosPaciente']);
-
 
 //Ruta para mostrar el formulario de editar dentista.
 Route::get('/administrador/editarDentista' , [DentistaController::class , 'edit'])->name('admin.editarDentista');
@@ -90,15 +86,31 @@ Route::get('/administrador/getAllDentistas' , [DentistaController::class , 'getA
 //Con esta ruta actualizamos los datos de un dentista. Dicha ruta se llama desde una peticion del archivo editarDentista.js
 Route::post('/administrador/actualizarDatosDentista' , [DentistaController::class , 'update']);
 
+//Ruta utilizada para generar la vista de buscar dentistas
+Route::get('/administrador/buscarDentisas' , [DentistaController::class , 'searchDentistView'])->name('admin.buscarDentista');
+
+
+//Esta ruta se usa desde la vista pagoCita para llenar el modal con los datos de un determinado dentista
+Route::get('/administrador/dentista' , [DentistaController::class ,'dentista']);
+
+
+
+//Ruta para mostrar el formulario de editar paciente
+Route::get('/administrador/editarPaciente' , [PacienteController::class , 'edit'])->name('admin.editarPaciente');
+
+//Ruta utilizada para llenar el datatable de la vista editar paciente. Se llama desde una petición asincrona.
+Route::get('/administrador/getAllPacientes' , [PacienteController::class , 'getAllPacientes']);
+
+//Esta ruta la utilizamos para actualizar los datos de un paciente.
+Route::post('/administrador/actualizarDatosPaciente' , [PacienteController::class , 'actualizarDatosPaciente']);
+
+//Con esta ruta almacenamos un nuevo paciente a la base de datos. Esta ruta se llamada desde una petición asincrona desde el archivo registroPaciente.js
+Route::post('/registraPaciente' , [PacienteController::class , 'store']);
+
 
 
 //Ruta utilizada para generar la vista de buscar pacientes
 Route::get('/administrador/buscarPacientes' , [PacienteController::class , 'show'])->name('admin.buscarPaciente');
-
-
-
-//Ruta utilizada para generar la vista de buscar dentistas
-Route::get('/administrador/buscarDentisas' , [DentistaController::class , 'searchDentistView'])->name('admin.buscarDentista');
 
 
 //Ruta para mostrar vista de eliminar paciente
@@ -108,12 +120,7 @@ Route::get('/administrador/eliminarPaciente' , [PacienteController::class , 'eli
 //Ruta usada para eliminar un paciente, se manda a llamar desde una petición asincrona en el archivo eliminarPacientes.js de la carpeta admin
 Route::get('/administrador/deletePaciente/{idPaciente}' , [PacienteController::class , 'destroy']);
 
-//Ruta utilizada para generar la vista de eliminacion de dentistas
-Route::get('/administrador/eliminarDentista' , [DentistaController::class , 'eliminarDentista'])->name('admin.eliminarDentista');
 
-
-//Ruta utilizada para eliminar un dentista
-Route::get('/administrador/deleteDentista/{id}' , [DentistaController::class , 'destroy']);
 
 /**
  *
@@ -140,3 +147,10 @@ Route::post('/administrador/guardarNomina' , [NominaController::class , 'saveNom
  * FIN DE BLOQUE DE RUTA PARA GENERAR LA NOMINA
  *
  */
+
+  //Generamos la vista de pagosCitas
+ Route::get('/administrador/pagoCitas' , [CitasController::class , 'index'])->name('admin.pagoCita');
+
+
+//ruta para llenar el datatable de la vista pagoCitas
+ Route::get('/administrador/getPagoCitas' , [CitasController::class , 'show']);
