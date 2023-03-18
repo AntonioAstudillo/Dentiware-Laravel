@@ -181,7 +181,7 @@
                  </a>
                  <ul class="nav nav-treeview">
                    <li class="nav-item">
-                     <a href="" class="nav-link">
+                     <a href="{{route('admin.nomina')}}" class="nav-link">
                        <i class="fas fa-wallet"></i>
                        <p>Nómina</p>
                      </a>

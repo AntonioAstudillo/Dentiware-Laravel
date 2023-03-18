@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\DentistaController;
+use App\Http\Controllers\admin\NominaController;
 use App\Http\Controllers\admin\PacienteController;
 use App\Http\Controllers\admin\TratamientosController;
 
@@ -113,3 +114,29 @@ Route::get('/administrador/eliminarDentista' , [DentistaController::class , 'eli
 
 //Ruta utilizada para eliminar un dentista
 Route::get('/administrador/deleteDentista/{id}' , [DentistaController::class , 'destroy']);
+
+/**
+ *
+ *
+ * BLOQUE DE RUTAS PARA GENERAR LA NOMINA
+ *
+ */
+
+ //Genera la vista
+Route::get('/administrador/nomina' , [NominaController::class , 'index'])->name('admin.nomina');
+
+//obtenemos los datos para llenar la datatable de la nomina
+Route::get('/administrador/getNomina' , [NominaController::class , 'show']);
+
+//Obtenemos el total de salario, para mandarlo a la api de pay pal
+Route::get('/administrador/getSalary' , [NominaController::class , 'getSalary']);
+
+//guardamos la nomina en caso de exito
+Route::post('/administrador/guardarNomina' , [NominaController::class , 'saveNomina']);
+
+
+/**
+ *
+ * FIN DE BLOQUE DE RUTA PARA GENERAR LA NOMINA
+ *
+ */
