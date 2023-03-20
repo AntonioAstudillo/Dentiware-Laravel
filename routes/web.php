@@ -154,3 +154,13 @@ Route::post('/administrador/guardarNomina' , [NominaController::class , 'saveNom
 
 //ruta para llenar el datatable de la vista pagoCitas
  Route::get('/administrador/getPagoCitas' , [CitasController::class , 'show']);
+
+
+ //Esta ruta se llamada desde el archivo cobroCitas.js, la cual se utiliza para obtener el saldo de un determinado tratamiento
+ Route::get('/administrador/getSaldo{id}' , [CitasController::class] , 'getSaldo');
+
+//Ruta utilizada para guardar los datos del pago de una cita.
+ Route::post('/administrador/generarPagoCita' , [CitasController::class , 'save']);
+
+
+ Route::get('/administrador/crearCita' , [CitasController::class , 'createCita']);

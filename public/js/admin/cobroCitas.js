@@ -101,19 +101,19 @@ function llenarModalPago(data) {
     let reciboServicio = getRandom() + getCharacter();
 
     //Llenamos los datos del modal.
-    document.getElementById("cantidadServicio").value = data[6];
+    document.getElementById("cantidadServicio").value = data.abono;
     document.getElementById("fechaPago").textContent = fechaPago;
     document.getElementById("reciboServicio").textContent = reciboServicio;
-    document.getElementById("servicioPago").textContent = data[7];
-    document.getElementById("precioServicio").textContent = data[6];
-    document.getElementById("totalServicio").textContent = "$" + data[6];
+    document.getElementById("servicioPago").textContent = data.tratamiento;
+    document.getElementById("precioServicio").textContent = data.abono;
+    document.getElementById("totalServicio").textContent = "$" + data.abono;
 
     //Definimos los eventos tanto para el cambio como para el boton de generar pago
     abono.addEventListener("change", function (e) {
         //Lo que hago aqui, es generar el cambio
         let valor = parseFloat(e.target.value);
 
-        valor = valor - parseFloat(data[6]);
+        valor = valor - parseFloat(data.abono);
 
         cambio.value = valor;
     });
@@ -122,38 +122,39 @@ function llenarModalPago(data) {
 function generarPago(data) {
     const req = new XMLHttpRequest();
     const formData = new FormData();
+    const token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
 
     //Agregamos los datos al objeto formData
     formData.append("cantidad", data.cantidadServicio);
     formData.append("hora", data.hora);
     formData.append("fecha", data.fecha);
     formData.append("folio", data.reciboServicio);
-    formData.append("idCita", data[0]);
-    formData.append("idPaciente", data[1]);
+    formData.append("idCita", data.idcita);
+    formData.append("idPaciente", data.idPersona);
 
-    req.open("POST", ruta + "administrador/generarPagoCita");
+    req.open("POST", "/administrador/generarPagoCita");
+    req.setRequestHeader("X-CSRF-TOKEN", token);
 
     req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
-            console.log(req.responseText);
-            if (req.responseText) {
-                Swal.fire(
-                    "Buen trabajo!",
-                    "El pago se efectuó correctamente!",
-                    "success"
-                ).then(function () {
-                    //Aqui debemos generar el pdf
-                    getSaldo(data);
-                });
-            } else {
-                Swal.fire(
-                    "Ups!",
-                    "Tuvimos problemas al procesar el pago!",
-                    "error"
-                ).then(function () {
-                    // window.location.reload();
-                });
-            }
+            Swal.fire(
+                "Buen trabajo!",
+                "El pago se efectuó correctamente!",
+                "success"
+            ).then(function () {
+                //Aqui debemos generar el pdf
+                getSaldo(data);
+            });
+        } else {
+            Swal.fire(
+                "Ups!",
+                "Tuvimos problemas al procesar el pago!",
+                "error"
+            ).then(function () {
+                // window.location.reload();
+            });
         }
     };
 
@@ -161,50 +162,23 @@ function generarPago(data) {
 }
 
 function getSaldo(data) {
-    const req = new XMLHttpRequest();
-    const formData = new FormData();
+    const doc = new jsPDF("p", "mm", [150, 150]);
 
-    //Agregamos los datos al objeto formData
-
-    formData.append("idPaciente", data[1]);
-
-    req.open("POST", ruta + "administrador/getSaldo");
-
-    req.onreadystatechange = function () {
-        if (req.readyState == 4 && req.status == 200) {
-            console.log(req.responseText);
-
-            if (req.responseText) {
-                const doc = new jsPDF("p", "mm", [150, 150]);
-
-                doc.text(20, 20, "FOLIO: " + data.reciboServicio);
-                doc.text(
-                    20,
-                    30,
-                    "FECHA DE PAGO: " + moment().format("DD MMMM YY, h:mm:ss a")
-                );
-                doc.text(20, 40, "PACIENTE: " + data[4]);
-                doc.text(20, 50, "TRATAMIENTO: " + data[7]);
-                doc.text(20, 60, "CANTIDAD: " + data.cantidadServicio);
-                doc.text(20, 70, "Recibido: " + data.dineroIngresado);
-                doc.text(20, 80, "CAMBIO: " + data.cambioServicio);
-                doc.text(20, 90, "SALDO: 0");
-                doc.text(20, 100, "AGRADECEMOS SU PREFERENCIA");
-                doc.save(data.reciboServicio);
-                window.location.reload();
-            } else {
-                Swal.fire(
-                    "Ups!",
-                    "Tuvimos problemas al procesar el pago !",
-                    "error"
-                ).then(function () {
-                    // window.location.reload();
-                });
-            }
-        }
-    };
-
-    req.send(formData);
+    doc.text(20, 20, "FOLIO: " + data.reciboServicio);
+    doc.text(
+        20,
+        30,
+        "FECHA DE PAGO: " + moment().format("DD MMMM YY, h:mm:ss a")
+    );
+    doc.text(20, 40, "PACIENTE: " + data.nombre);
+    doc.text(20, 50, "TRATAMIENTO: " + data.tratamiento);
+    doc.text(20, 60, "CANTIDAD: " + data.cantidadServicio);
+    doc.text(20, 70, "Recibido: " + data.dineroIngresado);
+    doc.text(20, 80, "CAMBIO: " + data.cambioServicio);
+    doc.text(20, 90, "SALDO: 0");
+    doc.text(20, 100, "AGRADECEMOS SU PREFERENCIA");
+    doc.save(data.reciboServicio);
+    window.location.reload();
 }
 
 function getRandom() {

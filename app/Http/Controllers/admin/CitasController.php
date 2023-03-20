@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\admin;
 
+use Exception;
+use App\Helpers\Auxiliares;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -21,17 +24,30 @@ class CitasController extends Controller
        return view('admin.cobroCitas');
     }
 
-
-    public function create()
+    //guardamos los datos correspondientes al pago de la cita
+    public function save(Request $request)
     {
-        //
+        $data = $request->all();
+
+        try
+        {
+            DB::transaction(function () use($data)
+            {
+                DB::insert('INSERT INTO pagos VALUES(?,?,?,?,?,?,?)' , [null , $data['cantidad'] , $data['hora'] , $data['fecha'] , $data['folio'] , $data['idCita'] , Auxiliares::getDatetime()]);
+                DB::update("UPDATE cita SET status = ? WHERE idcita = ?" , ['0' , $data['idCita']]);
+                DB::update("UPDATE historialtratamiento SET saldo = (saldo - ?) where idPaciente = ?" , [$data['cantidad']  , $data['idPaciente']]);
+
+            });
+
+            return response('' , 200);
+
+        }catch(Exception $e)
+        {
+            return response($e , 500);
+        }
+
     }
 
-
-    public function store(Request $request)
-    {
-        //
-    }
 
      //Con este metodo vamos a obtener todas las citas generadas, para poder mostrarlas en el datatable de pagoCitas
     public function show()
@@ -43,44 +59,16 @@ class CitasController extends Controller
         ->select('cita.idcita' , 'persona.idPersona' , 'cita.fecha' , 'cita.hora' , DB::raw('concat(persona.nombre , " " , persona.apellidos) as nombre') , 'persona.correo' , 'cita.abono' ,DB::raw('tratamiento.nombre as tratamiento'))
         ->get();
 
-
         return response()->json(['data' => $citas]);
-
-
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+
+    //metodo para mostrar la vista de createcita
+    public function createCita()
     {
-        //
+        return view('admin.createCita');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
