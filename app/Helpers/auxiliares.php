@@ -23,7 +23,7 @@ class Auxiliares extends Str
       return $cadena;
    }
 
-   //Con este metodo validamos si una cita ingresada, ya se encuentra registrada
+   //Con este metodo validamos si una cita ingresada, ya se encuentra registrada, retorna false en caso de que la cita esté ocupada
    public static function validarCita($horaCita , $fechaCita , $dentistaPaciente)
    {
       $citas = DB::select('SELECT * FROM cita WHERE hora = ? AND fecha = ? AND idDentista = ? AND status = ?', [$horaCita , $fechaCita , $dentistaPaciente , 1]);

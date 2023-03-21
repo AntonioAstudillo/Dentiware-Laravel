@@ -163,4 +163,5 @@ Route::post('/administrador/guardarNomina' , [NominaController::class , 'saveNom
  Route::post('/administrador/generarPagoCita' , [CitasController::class , 'save']);
 
 
- Route::get('/administrador/crearCita' , [CitasController::class , 'createCita']);
+ Route::get('/administrador/crearCita' , [CitasController::class , 'createCita'])->name('admin.createCita');
+ Route::post('/administrador/crearCita' , [CitasController::class , 'store'])->name('admin.createCita');

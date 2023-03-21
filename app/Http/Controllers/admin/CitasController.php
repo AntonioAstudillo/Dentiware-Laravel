@@ -5,9 +5,12 @@ namespace App\Http\Controllers\admin;
 use Exception;
 use App\Helpers\Auxiliares;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\admin\TratamientosController;
+
+
+
 
 class CitasController extends Controller
 {
@@ -68,6 +71,27 @@ class CitasController extends Controller
     public function createCita()
     {
         return view('admin.createCita');
+    }
+
+
+    //public static function validarCita($horaCita , $fechaCita , $dentistaPaciente)
+
+    //creamos una cita
+    public function store(Request $request)
+    {
+        $data = $request->all();
+
+        if(!Auxiliares::validarCita($data['horaCita'] , $data['fechaCita'] , $data['dentistaPaciente']  ))
+        {
+          return response('' , 422);
+        }
+
+        $data['abono'] = TratamientosController::getPrecio($data['tratamientoPaciente'] + 1);
+
+        DB::insert('INSERT INTO cita VALUES(?,?,?,?,?,?,?,?,?,?)' , [null , $data['fechaCita']  , $data['horaCita'] , $data['idPaciente'] , $data['dentistaPaciente'] , $data['tratamientoPaciente'] + 1 , $data['abono'] , $data['comentario'] , '1' , Auxiliares::getDatetime()]);
+
+        return response('' , 200);
+
     }
 
 

@@ -23,4 +23,13 @@ class TratamientosController extends Controller
     }
 
 
+    //obtenemos el precio de un tratamiento
+    public static function getPrecio($tratamiento)
+    {
+      $data = DB::select('SELECT precio FROM tratamiento WHERE idtratamiento = ?' , [$tratamiento]);
+
+      return (isset($data[0]->precio)) ? $data[0]->precio : false ;
+    }
+
+
 }
