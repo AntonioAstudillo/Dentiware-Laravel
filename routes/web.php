@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CitasController;
+use App\Http\Controllers\admin\EstadisticaController;
 use App\Http\Controllers\admin\NominaController;
 use App\Http\Controllers\admin\DentistaController;
 use App\Http\Controllers\admin\PacienteController;
@@ -171,3 +172,11 @@ Route::get('/administrador/editarCita' , [CitasController::class , 'editarCita']
 
 /**Actualizamos los valores de una cita */
 Route::post('/administrador/updateCita' , [CitasController::class , 'update']);
+
+
+//gneramos la vista de estadisticas
+Route::get('/administrador/estadisticas' , [EstadisticaController::class , 'show'])->name('admin.estadisticas');
+
+
+//Hacemos una peticion para obtener la data que utilizaremos para generar las graficas
+Route::get('/administrador/getData' , [EstadisticaController::class , 'peticion']);

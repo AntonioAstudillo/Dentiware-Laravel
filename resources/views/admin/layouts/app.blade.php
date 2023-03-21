@@ -220,7 +220,7 @@
              </li>
 
              <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{route('admin.estadisticas')}}" class="nav-link">
                    <i class="fas fa-chart-area"></i>
                    <p>
                      Estadísticas
