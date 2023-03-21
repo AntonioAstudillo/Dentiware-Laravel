@@ -95,4 +95,36 @@ class CitasController extends Controller
     }
 
 
+    //mostramos la vista de editarCita
+    public function editarCita()
+    {
+        return view('admin.editarCita');
+    }
+
+
+
+    public function update(Request $request)
+    {
+        $data = $request->all();
+
+        if(!Auxiliares::validarCita($data['horaCita'] , $data['fechaCita'] , $data['dentistaPaciente']  ))
+        {
+          return response('' , 422);
+        }
+
+        $data['abono'] = TratamientosController::getPrecio($data['tratamientoPaciente'] + 1);
+
+        $filasAfectadas = DB::update('UPDATE cita SET fecha = ? , hora = ? , comentarios = ? , abono = ? , idDentista = ? , idTratamiento = ? WHERE idPaciente = ? and status = ? '
+        ,[$data['fechaCita'] , $data['horaCita'] , $data['comentario'] , $data['abono'] , $data['dentistaPaciente'] , $data['tratamientoPaciente'] + 1 , $data['idPaciente'] , '1'  ]);
+
+        if($filasAfectadas > 0)
+        {
+            return response('' , 200);
+        }else{
+            return response('' , 500);
+        }
+
+    }
+
+
 }

@@ -162,6 +162,12 @@ Route::post('/administrador/guardarNomina' , [NominaController::class , 'saveNom
 //Ruta utilizada para guardar los datos del pago de una cita.
  Route::post('/administrador/generarPagoCita' , [CitasController::class , 'save']);
 
-
+/** Rutas para el funcionamiento de crear cita  */
  Route::get('/administrador/crearCita' , [CitasController::class , 'createCita'])->name('admin.createCita');
  Route::post('/administrador/crearCita' , [CitasController::class , 'store'])->name('admin.createCita');
+
+ /**Rutas para el funcionamiento de ediar cita */
+Route::get('/administrador/editarCita' , [CitasController::class , 'editarCita'])->name('admin.editarCita');
+
+/**Actualizamos los valores de una cita */
+Route::post('/administrador/updateCita' , [CitasController::class , 'update']);
