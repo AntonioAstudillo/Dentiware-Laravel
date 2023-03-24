@@ -229,7 +229,7 @@
              </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{route('admin.administrador')}}" class="nav-link">
                     <i class="fas fa-user-shield"></i>
                     <p>
                        Administrador

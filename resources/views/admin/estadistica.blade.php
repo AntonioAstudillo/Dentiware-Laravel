@@ -2,11 +2,17 @@
 
 
 @section('contenido')
+
+
 <div class="content-wrapper">
-    <div class="content-header text-left text-dark h5 lead">Estadisticas </div>
+
+    <div class="container">
+        <div class="content-header text-left text-dark h5 lead ">Estadisticas </div>
         <div class="container">
-                <div id="piechart"></div>
+            <div  id="piechart"></div>
         </div>
+    </div>
+
 </div>
 
 @endsection

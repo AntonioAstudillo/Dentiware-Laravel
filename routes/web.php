@@ -180,3 +180,19 @@ Route::get('/administrador/estadisticas' , [EstadisticaController::class , 'show
 
 //Hacemos una peticion para obtener la data que utilizaremos para generar las graficas
 Route::get('/administrador/getData' , [EstadisticaController::class , 'peticion']);
+
+//Ruta para mostrar el modulo de administrador
+Route::get('/administrador/administrador' , [AdminController::class , 'show'])->name('admin.administrador');
+
+//Obtenemos todos los usuarios para llenar el datatable de administrador
+Route::get('/administrador/getUsers' , [AdminController::class , 'all']);
+
+//actualizamos los datos de un usuario administrador
+Route::post('/administrador/administrador/updateUser' , [AdminController::class , 'update']);
+
+//creamos un nuevo usuario
+Route::post('/administrador/administrador/registerUser' , [AdminController::class , 'create']);
+
+//ruta para eliminar usuarios
+Route::get('/administrador/administrador/delete/{id}' , [AdminController::class , 'destroy']);
+
