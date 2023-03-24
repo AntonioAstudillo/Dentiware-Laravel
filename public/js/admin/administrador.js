@@ -30,7 +30,7 @@ function mostrarUsers() {
     );
 
     const obtener_data_editar = function (tbody, tabla) {
-        $(tbody).on("click", "tr", function (e) {
+        $(tbody).on("click", "button", function (e) {
             let data = tabla.row($(this)).data();
 
             if (

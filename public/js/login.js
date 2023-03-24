@@ -11,7 +11,15 @@ function onClick(e) {
     ocultarBoton();
     mostrarSpinner();
 
-    loguearse();
+    grecaptcha.ready(function () {
+        grecaptcha
+            .execute("6Lc1pyslAAAAAPEwZipERqapNsDEgV1GoH263h9_", {
+                action: "loguearse",
+            })
+            .then(function (token) {
+                loguearse(token);
+            });
+    });
 }
 
 function mostrarSpinner() {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use ReCaptcha\ReCaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -28,27 +29,42 @@ class LoginController extends Controller
 
         $data = $request->all();
 
-        $validator = Validator::make($data, [
-            'email' => 'required|max:255|email',
-            'password' => 'required',
-        ]);
 
+        $recaptcha = new ReCaptcha('6Lc1pyslAAAAANV9DKodJ2t9shMo2v2MdT_YKKjB');
 
-        if($validator->fails())
+        $response = $recaptcha->verify($data['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+
+        if($response->isSuccess())
         {
-            return response('La validacion falla' , 422);
+            $validator = Validator::make($data, [
+                'email' => 'required|max:255|email',
+                'password' => 'required',
+            ]);
+
+            if($validator->fails())
+            {
+                return response('La validación falla' , 422);
+            }
+            else
+            {
+                if(!( auth()->attempt( $request->only('email' , 'password') )  )   )
+                {
+                    return response('Credenciales incorrectas' , 401);
+
+                }
+                else
+                {
+                    return response('Acceso correcto' , 200);
+                }
+            }
         }
         else
         {
-            if(!( auth()->attempt( $request->only('email' , 'password') )  )   )
-            {
-                return response('Credenciales incorrectas' , 401);
-
-            }
-            else{
-                return response('Acceso correcto' , 200);
-            }
+            return response('' , 400);
         }
+
+
+
     }
 
 

@@ -9,6 +9,18 @@
 	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <link rel="stylesheet" href="{{asset('css/login/loginAll.css')}}">
+      <script src="https://www.google.com/recaptcha/api.js?render=6Lc1pyslAAAAAPEwZipERqapNsDEgV1GoH263h9_"></script>
+
+       <script>
+      function onClick(e) {
+        e.preventDefault();
+        grecaptcha.ready(function() {
+          grecaptcha.execute('6Lc1pyslAAAAAPEwZipERqapNsDEgV1GoH263h9_', {action: 'submit'}).then(function(token) {
+              // Add your logic to submit to your backend server here.
+          });
+        });
+      }
+  </script>
 
 
 
@@ -63,8 +75,8 @@
                            <div  class="spinner-border text-danger" role="status">
                            </div>
                         </div>
-      		            <div id="btnIngresarLogin" class="form-group">
-    <button id="btnIngresar" type="button" class="form-control btn btn-primary submit px-3 g-recaptcha">Ingresar</button>
+      		              <div id="btnIngresarLogin" class="form-group">
+                         <button id="btnIngresar" type="button" class="form-control btn btn-primary submit px-3 g-recaptcha"  data-sitekey="6Lc1pyslAAAAAPEwZipERqapNsDEgV1GoH263h9_" data-callback='onClick' data-action='submit'>Ingresar</button>
                       </div>
 		              </form>
 
